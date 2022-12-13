@@ -32,7 +32,7 @@ function initClientCommands() {
       console.warn(`Command ${file} is missing data or execute`);
     }
   }
-  //   console.log(`Loaded client commands: \n ${JSON.stringify(client.commands, null, 2)}`);
+  console.log(`Loaded client commands: \n ${JSON.stringify(client.commands, null, 2)}`);
 }
 
 function initClientInteractions() {
