@@ -3,7 +3,7 @@ const { sc_a_id, client_id } = require("../config.json");
 const axios = require('axios');
 
 module.exports = {
-  data: new SlashCommandBuilder().setName("bangers").setDescription("Retrieves a list of bangers"),
+  data: new SlashCommandBuilder().setName("bangers").setDescription("Retrieves a list of mixes from the always updating list."),
   async execute(interaction) {
     const tracks = await getResponses();
     await interaction.reply(`Found ${tracks.length} from the bangers list`);
