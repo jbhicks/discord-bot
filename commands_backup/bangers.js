@@ -1,19 +1,15 @@
 const { SlashCommandBuilder } = require("@discordjs/builders");
 const { sc_a_id, client_id } = require("../config.json");
-const axios = require('axios');
+const { get } = require('axios');
 
-module.exports = {
-  data: new SlashCommandBuilder().setName("bangers").setDescription("Retrieves a list of mixes from the always updating list."),
-  async execute(interaction) {
+export const data = new SlashCommandBuilder().setName("bangers").setDescription("Retrieves a list of mixes from the always updating list.");
+export async function execute(interaction) {
     const tracks = await getResponses();
     await interaction.reply(`Found ${tracks.length} from the bangers list`);
     for (const track of tracks) {
-      await interaction.followUp(track);
+        await interaction.followUp(track);
     }
-  },
-};
-getResponses();
-
+}
 
 async function getResponses() {
   const tracks = await getSCStream();
@@ -51,7 +47,7 @@ async function getSCStream(){
     "sec-ch-ua-platform": "\"Windows\"",
   };
   console.log(`attempting to get stream from ${url} with sc_a_id ${sc_a_id} and client_id ${client_id}`);
-  const response = await axios.get(url, {headers})
+  const response = await get(url, {headers})
   console.log(`retrieved ${response.data.collection.length} tracks`);
      // filter out tracks that are of type playlist
     let filteredTracks = response.data.collection.filter((track) => {

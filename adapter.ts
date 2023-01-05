@@ -1,41 +1,38 @@
-import type { DiscordGatewayAdapterCreator, DiscordGatewayAdapterLibraryMethods } from "@discordjs/voice";
-import {
-    GatewayDispatchEvents,
-    GatewayVoiceServerUpdateDispatchData,
-    GatewayVoiceStateUpdateDispatchData,
-} from "discord-api-types/v10";
-import { Client, Snowflake, Guild, VoiceBasedChannel, Constants, Events, Status } from "discord.js";
+import { DiscordGatewayAdapterCreator, DiscordGatewayAdapterLibraryMethods } from '@discordjs/voice';
+import { VoiceBasedChannel, Snowflake, Client, Guild, Events, Status, GatewayDispatchEvents } from 'discord.js';
+import { GatewayVoiceServerUpdateDispatchData, GatewayVoiceStateUpdateDispatchData } from 'discord-api-types/v9';
+
 const adapters = new Map<Snowflake, DiscordGatewayAdapterLibraryMethods>();
 const trackedClients = new Set<Client>();
-const trackedShards = new Map<number, Set<Snowflake>>();
 
+/**
+ * Tracks a Discord.js client, listening to VOICE_SERVER_UPDATE and VOICE_STATE_UPDATE events
+ * 
+ * @param client - The Discord.js Client to track
+ */
 function trackClient(client: Client) {
     if (trackedClients.has(client)) return;
     trackedClients.add(client);
-    client.ws.on(GatewayDispatchEvents.VoiceServerUpdate, (data: GatewayVoiceServerUpdateDispatchData) => {
-        adapters.get(data.guild_id)?.onVoiceServerUpdate(data);
+    client.ws.on(GatewayDispatchEvents.VoiceServerUpdate, (payload: GatewayVoiceServerUpdateDispatchData) => {
+        adapters.get(payload.guild_id)?.onVoiceServerUpdate(payload);
     });
-
-    client.ws.on(GatewayDispatchEvents.VoiceStateUpdate, (data: GatewayVoiceStateUpdateDispatchData) => {
-        if (data.guild_id && data.session_id && data.user_id === client.user?.id) {
-            adapters.get(data.guild_id)?.onVoiceStateUpdate(data);
+    client.ws.on(GatewayDispatchEvents.VoiceStateUpdate, (payload: GatewayVoiceStateUpdateDispatchData) => {
+        if (payload.guild_id && payload.session_id && payload.user_id === client.user?.id) {
+            adapters.get(payload.guild_id)?.onVoiceStateUpdate(payload);
         }
     });
-
-    client.on(Events.ShardDisconnect, (event, shardID) => {
+    client.on(Events.ShardDisconnect, (_, shardID) => {
         const guilds = trackedShards.get(shardID);
         if (guilds) {
-            for (const guildID of guilds) {
-                const adapter = adapters.get(guildID);
-                if (adapter) {
-                    adapter.destroy();
-                    adapters.delete(guildID);
-                }
+            for (const guildID of guilds.values()) {
+                adapters.get(guildID)?.destroy();
             }
-            trackedShards.delete(shardID);
         }
+        trackedShards.delete(shardID);
     });
 }
+
+const trackedShards = new Map<number, Set<Snowflake>>();
 
 function trackGuild(guild: Guild) {
     let guilds = trackedShards.get(guild.shardId);
@@ -46,15 +43,19 @@ function trackGuild(guild: Guild) {
     guilds.add(guild.id);
 }
 
+/**
+ * Creates an adapter for a Voice Channel.
+ * 
+ * @param channel - The channel to create the adapter for
+ */
 export function createDiscordJSAdapter(channel: VoiceBasedChannel): DiscordGatewayAdapterCreator {
-    console.log(`Creating adapter for channel ${channel.name} (${channel.id}) in guild ${channel.guild.name}`);
     return (methods) => {
         adapters.set(channel.guild.id, methods);
         trackClient(channel.client);
         trackGuild(channel.guild);
         return {
             sendPayload(data) {
-                if (channel.guild.shard.status === Status.Ready) {
+                if (channel.guild.shard.status === Status.Ready) {  
                     channel.guild.shard.send(data);
                     return true;
                 }
