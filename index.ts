@@ -16,8 +16,6 @@ const path = require('path');
 const commands = new Collection();
 const commandsPath = path.join(__dirname, 'commands');
 const commandFiles = fs.readdirSync(commandsPath).filter((file: string) => file.endsWith('.js'));
-const testMp3Url = 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3';
-
 
 commandSetup();
 void client.login(token);
@@ -68,13 +66,13 @@ client.on(Events.InteractionCreate, async (interaction) => {
 	
 	try { 
 		const command: any = commands.get(interaction.commandName);
+		console.log(`interaction: ${interaction}`);
 		if (command) {
-			await command.execute(interaction, player, testMp3Url);
+			await command.execute(interaction, player);
 		} else {
 			console.log(`command ${interaction.commandName} not found`);
 		}
 	} catch (error) {
 		console.error(error);
 	}
-
 });
