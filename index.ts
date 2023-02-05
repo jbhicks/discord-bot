@@ -25,6 +25,7 @@ function commandSetup() {
 		const filePath = path.join(commandsPath, file);
 		const command = require(filePath);
 		if ('data' in command) {
+			console.log(`setting command ${command.data.name}`);
 			commands.set(command.data.name, command);
 		} else {
 			console.error(`Command ${file} does not export a command data object`);
