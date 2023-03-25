@@ -3,12 +3,14 @@
     "@discordjs/opus": "^0.8.0",
     "@discordjs/voice": "^0.14.0",
     "axios": "^1.2.2",
+    "discord": "^0.8.2",
     "discord-api-types": "^0.37.25",
     "discord-player": "^5.3.2",
     "discord.js": "^14.7.1",
+    "dotenv": "^16.0.3",
     "ffmpeg-static": "^5.1.0",
     "opusscript": "^0.0.8",
     "sodium": "^3.0.2"
   },
-  "main": "index.ts"
+  "main": "bot.ts"
 }

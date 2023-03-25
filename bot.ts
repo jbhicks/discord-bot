@@ -6,7 +6,13 @@ import {
 } from '@discordjs/voice';
 import { GatewayIntentBits, ActivityOptions, ActivityType, Client, Collection, Events, VoiceBasedChannel, VoiceChannel } from 'discord.js';
 import { createDiscordJSAdapter } from './adapter';
-import { token, guildId, channelInfo } from './config.json';
+require('dotenv').config({ path: __dirname + '/.env' });
+console.log(process.env.TOKEN);
+const token = process.env.TOKEN;
+const guildId = process.env.GUILD_ID;
+const channelId = process.env.CHANNEL_ID;
+
+
 const player = createAudioPlayer();
 const client = new Client({
 	intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.GuildVoiceStates],
@@ -36,9 +42,9 @@ function commandSetup() {
 client.once(Events.ClientReady, async () => {
 	console.log('Discord.js client is ready!');
 	try {
-		const channel: VoiceBasedChannel = client.channels.cache.get(channelInfo.id) as VoiceChannel;
+		const channel: VoiceBasedChannel = client.channels.cache.get(channelId) as VoiceChannel;
 		const connection = joinVoiceChannel({
-			channelId: channelInfo.id,
+			channelId: channelId,
 			guildId: guildId,
 			adapterCreator: createDiscordJSAdapter(channel),
 		});
@@ -64,8 +70,8 @@ client.on(Events.InteractionCreate, async (interaction) => {
 		return;
 	}
 	console.log(`received interaction ${interaction.commandName}`);
-	
-	try { 
+
+	try {
 		const command: any = commands.get(interaction.commandName);
 		console.log(`interaction: ${interaction}`);
 		if (command) {

@@ -4,7 +4,7 @@ const ytdl = require("ytdl-core");
 
 module.exports = {
     data: new SlashCommandBuilder()
-        .setName("us-whatever")
+        .setName("not-crescent-fresh")
         .setDescription('plays the Not Crescent Fresh song'),
 
     async execute(interaction, player, url) {
