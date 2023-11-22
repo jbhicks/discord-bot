@@ -49,13 +49,14 @@ function trackGuild(guild: Guild) {
  * @param channel - The channel to create the adapter for
  */
 export function createDiscordJSAdapter(channel: VoiceBasedChannel): DiscordGatewayAdapterCreator {
+    console.log("Creating adapter for channel: ", channel);
     return (methods) => {
         adapters.set(channel.guild.id, methods);
         trackClient(channel.client);
         trackGuild(channel.guild);
         return {
             sendPayload(data) {
-                if (channel.guild.shard.status === Status.Ready) {  
+                if (channel.guild.shard.status === Status.Ready) {
                     channel.guild.shard.send(data);
                     return true;
                 }

@@ -1,11 +1,10 @@
-const { SlashCommandBuilder } = require("@discordjs/builders");
+import { SlashCommandBuilder } from "@discordjs/builders";
 
-module.exports = {
-    data: new SlashCommandBuilder()
-        .setName('stop')
-        .setDescription('stop playing a song'),
-    async execute(interaction, player) {
-        player.stop();
-        await interaction.reply('Record scratch!');
-    },
+export const data = new SlashCommandBuilder()
+    .setName('stop')
+    .setDescription('stop playing a song');
+
+export async function execute(interaction, player) {
+    player.stop();
+    await interaction.reply('Record scratch!');
 };

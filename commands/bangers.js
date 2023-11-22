@@ -1,18 +1,21 @@
-const { SlashCommandBuilder } = require("@discordjs/builders");
-const { sc_a_id, client_id, sc_oauth_token } = require("../config.json");
-const { get } = require('axios');
+import { SlashCommandBuilder } from "@discordjs/builders";
+import axios from 'axios';
+// require('dotenv').config({ path: __dirname + '../.env' });
+console.log(process.env.TOKEN);
+const token = process.env.TOKEN;
+const guildId = process.env.GUILD_ID;
+const channelId = process.env.CHANNEL_ID;
 
-module.exports = {
-  data: new SlashCommandBuilder()
-    .setName('bangers')
-    .setDescription('Search for a mix to play'),
-  async execute(interaction) {
-    const tracks = await getResponses();
-    await interaction.reply(`Found ${tracks.length} mixes. Choose wisely.`);
-    for (const track of tracks) {
-      await interaction.followUp(track);
-    }
-  },
+export const data = new SlashCommandBuilder()
+  .setName('bangers')
+  .setDescription('Search for a mix to play');
+
+export async function execute(interaction) {
+  const tracks = await getResponses();
+  await interaction.reply(`Found ${tracks.length} mixes. Choose wisely.`);
+  for (const track of tracks) {
+    await interaction.followUp(track);
+  }
 };
 
 async function getResponses() {
