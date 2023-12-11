@@ -1,36 +1,43 @@
-const { REST, Routes } = require("discord.js");
-require('dotenv').config({ path: __dirname + '/.env' });
+import { REST, Routes } from "discord.js";
+import dotenv from 'dotenv';
+import fs from 'fs';
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+dotenv.config({ path: __dirname + '/.env' });
+
+// rest of your code
+
 const token = process.env.TOKEN;
 const guildId = process.env.GUILD_ID;
 const clientId = process.env.CLIENT_ID;
-const fs = require("node:fs");
 
 const commands = [];
-// Grab all the command files from the commands directory you created earlier
 const commandFiles = fs.readdirSync("./commands").filter((file) => file.endsWith(".ts") || file.endsWith(".js"));
 
-// Grab the SlashCommandBuilder#toJSON() output of each command's data for deployment
-for (const file of commandFiles) {
-  const command = require(`./commands/${file}`);
-  commands.push(command.data.toJSON());
+const loadCommands = async () => {
+  for (const file of commandFiles) {
+    const command = await import(`./commands/${file}`);
+    commands.push(command.data.toJSON());
+  }
 }
 
-// Construct and prepare an instance of the REST module
 const rest = new REST({ version: "10" }).setToken(token);
 
-// and deploy your commands!
 (async () => {
   try {
-    console.log(`Started refreshing ${commands.length} application (/) commands.: \n${JSON.stringify(commands, null, 2)}`);
-
-    // The put method is used to fully refresh all commands in the guild with the current set
+    await loadCommands();
+    console.log(`Started refreshing ${commands.length} application (/) commands`);
+    console.log(`using token ${token} and guildId ${guildId} and clientId ${clientId}`);
     const data = await rest.put(Routes.applicationGuildCommands(clientId, guildId), {
       body: commands,
     });
 
     console.log(`Successfully reloaded ${data.length} application (/) commands.`);
   } catch (error) {
-    // And of course, make sure you catch and log any errors!
     console.error(error);
   }
 })();

@@ -2,6 +2,9 @@
   "compilerOptions": {
     "moduleResolution": "node",
     "target": "es2015",
-    "resolveJsonModule": true
+    "module": "CommonJS",
+    "resolveJsonModule": true,
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true
   }
 }
