@@ -1,19 +1,12 @@
 import { SlashCommandBuilder } from "@discordjs/builders";
-import { createAudioResource } from "@discordjs/voice";
-import ytdl from "ytdl-core";
+import { playVideo } from "../lib/common-functions.js";
 
 export const data = new SlashCommandBuilder()
     .setName("llama-school")
-    .setDescription('plays the school song song');
+    .setDescription('Good day, sir.');
 
-export async function execute(interaction, player, url) {
-    console.log(`handling llama school command with ${player} and URL ${url}`);
+export async function execute(interaction) {
     const crescentFreshUrl = 'https://www.youtube.com/watch?v=FOfa6JEIVkk';
-    const streamOptions = { seek: 0, volume: 1 };
-    const stream = ytdl(crescentFreshUrl, { filter: 'audioonly' });
-    console.log(`creating audio resource from ${stream}\n ______________________________________________`);
-    const audioResource = createAudioResource(stream);
-    player.play(audioResource);
-    console.log(`audio player is now status ${player.state.status}`);
-    await interaction.reply('Now playing the Llama School song');
+    await playVideo(interaction, crescentFreshUrl);
+    await interaction.reply('how do youget the llama to school?');
 };

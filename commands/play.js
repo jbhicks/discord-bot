@@ -1,6 +1,7 @@
 import { SlashCommandBuilder } from "@discordjs/builders";
 import { createAudioResource } from "@discordjs/voice";
 import ytdl from "ytdl-core";
+import { playVideo } from "../lib/common-functions.js";
 
 export const data = new SlashCommandBuilder()
     .setName('play')
@@ -20,11 +21,7 @@ export async function execute(interaction, player) {
             player.play(resource);
         } else {
             console.log(`setting up youtube video at ${url}`);
-            const streamOptions = { seek: 0, volume: 1 };
-            const stream = ytdl(url, { filter: 'audioonly' });
-            const resource = createAudioResource(stream, streamOptions);
-            console.log(`resource: ${resource}`);
-            player.play(resource);
+            await playVideo(interaction, url);
         }
         await interaction.reply('Now playing ' + url);
     }

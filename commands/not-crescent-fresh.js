@@ -1,19 +1,12 @@
 import { SlashCommandBuilder } from "@discordjs/builders";
-import { createAudioResource } from "@discordjs/voice";
-import ytdl from "ytdl-core";
+import { playVideo } from "../lib/common-functions.js";
 
 export const data = new SlashCommandBuilder()
     .setName("not-crescent-fresh")
-    .setDescription('plays the Not Crescent Fresh song');
+    .setDescription('Good day, sir.');
 
-export async function execute(interaction, player, url) {
-    console.log(`handling Not Crescent Fresh command with ${player} and URL ${url}`);
+export async function execute(interaction) {
     const crescentFreshUrl = 'https://youtu.be/S0gJZMx79pA';
-    const streamOptions = { seek: 0, volume: 1 };
-    const stream = ytdl(crescentFreshUrl, { filter: 'audioonly' });
-    console.log(`creating audio resource from ${stream}\n ______________________________________________`);
-    const audioResource = createAudioResource(stream);
-    player.play(audioResource);
-    console.log(`audio player is now status ${player.state.status}`);
-    await interaction.reply('Now playing the Not Crescent Fresh song');
+    await playVideo(interaction, crescentFreshUrl);
+    await interaction.reply('Not Crescent Fresh');
 };
