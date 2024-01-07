@@ -17,11 +17,16 @@
     "ffmpeg-static": "^5.1.0",
     "openai": "^3.2.1",
     "opusscript": "^0.0.8",
-    "sodium": "^3.0.2"
+    "sodium": "^3.0.2",
+    "soundcloud-scraper": "^5.0.3",
+    "spotify-url-info": "^3.2.10",
+    "youtube-sr": "^4.3.10",
+    "ytdl-core": "^4.11.5"
   },
   "main": "index.js",
   "type": "module",
   "devDependencies": {
+    "@biomejs/biome": "^1.4.1",
     "esbuild": "^0.19.9",
     "nodemon": "^3.0.2",
     "ts-node": "^10.9.2",

@@ -1,7 +1,6 @@
 import { SlashCommandBuilder } from "@discordjs/builders";
 import { createAudioResource } from "@discordjs/voice";
-import ytdl from "ytdl-core";
-import { playVideo } from "../lib/common-functions.js";
+import { playVideo } from "../../lib/common-functions.js";
 
 export const data = new SlashCommandBuilder()
     .setName('play')

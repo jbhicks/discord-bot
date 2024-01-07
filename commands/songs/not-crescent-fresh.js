@@ -1,12 +1,12 @@
 import { SlashCommandBuilder } from "@discordjs/builders";
-import { playVideo } from "../lib/common-functions.js";
+import { playVideo } from "../../lib/common-functions.js";
 
 export const data = new SlashCommandBuilder()
-    .setName("mercy")
+    .setName("not-crescent-fresh")
     .setDescription('Good day, sir.');
 
 export async function execute(interaction) {
-    const crescentFreshUrl = 'https://youtu.be/5hfYJsQAhl0';
+    const crescentFreshUrl = 'https://youtu.be/S0gJZMx79pA';
     await playVideo(interaction, crescentFreshUrl);
-    await interaction.reply('may God have mercy upon your soul');
+    await interaction.reply('Not Crescent Fresh');
 };

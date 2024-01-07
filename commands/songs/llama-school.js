@@ -1,5 +1,5 @@
 import { SlashCommandBuilder } from "@discordjs/builders";
-import { playVideo } from "../lib/common-functions.js";
+import { playVideo } from "../../lib/common-functions.js";
 
 export const data = new SlashCommandBuilder()
     .setName("llama-school")

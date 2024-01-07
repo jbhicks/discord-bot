@@ -1,5 +1,5 @@
 import { SlashCommandBuilder } from "@discordjs/builders";
-import { leaveVoiceChannel } from "../lib/common-functions.js";
+import { leaveVoiceChannel } from "../../lib/common-functions.js";
 
 export const data = new SlashCommandBuilder()
     .setName('stop')
