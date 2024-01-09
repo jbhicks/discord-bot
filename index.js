@@ -1,6 +1,7 @@
-const config = require('dotenv').config;
-
-const token = process.env.TOKEN;
+const config = require('dotenv').config();
+console.log(config.parsed);
+const token = config.parsed.TOKEN;
+console.log(token);
 
 const fs = require('node:fs');
 const path = require('node:path');

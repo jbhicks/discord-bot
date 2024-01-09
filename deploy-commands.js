@@ -10,8 +10,8 @@ const token = process.env.TOKEN;
 const guildId = process.env.GUILD_ID;
 const clientId = process.env.CLIENT_ID;
 const commands = [];
-
-console.log(`[INFO] Deploying commands to guild ${guildId} with client ${clientId}`);
+console.log(`[INFO] Deploying commands with token ${token}`);
+console.log(`[INFO] Guild ${guildId}, client ${clientId}`);
 
 // Grab all the command folders from the commands directory you created earlier
 const foldersPath = path.join(__dirname, 'commands');
