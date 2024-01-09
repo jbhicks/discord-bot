@@ -1,13 +1,8 @@
-import { REST, Routes } from "discord.js";
-import dotenv from 'dotenv';
-import fs from 'fs';
-import { fileURLToPath } from 'url';
-import { dirname } from 'path';
-import path from 'path';
-import fetch from 'node-fetch';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
+const { REST, Routes } = require("discord.js");
+const dotenv = require('dotenv');
+const fs = require('fs');
+const tokenUrl = require('url');
+const path = require('path');
 
 dotenv.config({ path: `${__dirname}/.env` });
 
@@ -30,7 +25,7 @@ for (const folder of commandFolders) {
 	// Grab the SlashCommandBuilder#toJSON() output of each command's data for deployment
 	for (const file of commandFiles) {
 		const filePath = path.join(commandsPath, file);
-		const command = await import(filePath);
+		const command = require(filePath);
 		if ('data' in command && 'execute' in command) {
 			commands.push(command.data.toJSON());
 		} else {
@@ -39,8 +34,22 @@ for (const folder of commandFolders) {
 	}
 
 }
+const rest = new REST({ version: '9' }).setToken(token);
 
-const url = `https://discord.com/api/v10${Routes.applicationGuildCommands(clientId, guildId)}`;
-const headers = { Authorization: `Bot ${token}` };
-console.log(`[INFO] Deploying ${commands.length} commands to ${url}`);
-fetch(url, { method: 'PUT', headers, body: JSON.stringify(commands) });
+(async () => {
+	try {
+		console.log('Started refreshing application (/) commands.');
+
+
+		await rest.put(
+			Routes.applicationCommands(clientId, guildId),
+			{ body: commands },
+
+		);
+
+		console.log('Successfully reloaded application (/) commands.');
+
+	} catch (error) {
+		console.error(error);
+	}
+})();

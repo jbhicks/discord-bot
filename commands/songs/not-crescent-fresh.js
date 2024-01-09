@@ -1,12 +1,16 @@
-import { SlashCommandBuilder } from "@discordjs/builders";
-import { playVideo } from "../../lib/common-functions.js";
+const { SlashCommandBuilder } = require("@discordjs/builders");
+const { playVideo } = require("../../lib/common-functions.js");
 
-export const data = new SlashCommandBuilder()
+const data = new SlashCommandBuilder()
     .setName("not-crescent-fresh")
     .setDescription('Good day, sir.');
 
-export async function execute(interaction) {
+async function execute(interaction, client) {
+
     const crescentFreshUrl = 'https://youtu.be/S0gJZMx79pA';
-    await playVideo(interaction, crescentFreshUrl);
+    await playVideo(client, interaction, crescentFreshUrl);
     await interaction.reply('Not Crescent Fresh');
 };
+
+module.exports = { data, execute };
+

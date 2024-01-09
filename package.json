@@ -24,7 +24,6 @@
     "ytdl-core": "^4.11.5"
   },
   "main": "index.js",
-  "type": "module",
   "devDependencies": {
     "@biomejs/biome": "^1.4.1",
     "esbuild": "^0.19.9",

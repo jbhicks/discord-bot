@@ -1,13 +1,13 @@
-import { SlashCommandBuilder } from "@discordjs/builders";
-import { createAudioResource } from "@discordjs/voice";
-import { playVideo } from "../../lib/common-functions.js";
+const { SlashCommandBuilder } = require("@discordjs/builders");
+const { createAudioResource } = require("@discordjs/voice");
+const { playVideo } = require("../../lib/common-functions.js");
 
-export const data = new SlashCommandBuilder()
+const data = new SlashCommandBuilder()
     .setName('play')
     .setDescription('play a song')
     .addStringOption(option => option.setName('url').setDescription('url of song to play'));
 
-export async function execute(interaction, player) {
+async function execute(interaction, player) {
     const url = interaction.options.getString('url');
     if (!url) {
         await interaction.reply('did not receive a url');
@@ -25,3 +25,6 @@ export async function execute(interaction, player) {
         await interaction.reply('Now playing ' + url);
     }
 };
+
+module.exports = { data, execute };
+

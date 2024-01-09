@@ -1,12 +1,15 @@
-import { SlashCommandBuilder } from "@discordjs/builders";
-import { leaveVoiceChannel } from "../../lib/common-functions.js";
+const { SlashCommandBuilder } = require("@discordjs/builders");
+const { leaveVoiceChannel } = require("../../lib/common-functions.js");
 
-export const data = new SlashCommandBuilder()
+const data = new SlashCommandBuilder()
     .setName('stop')
     .setDescription('stop playing a song');
 
-export async function execute(interaction, player) {
+async function execute(interaction, player) {
     if (player) player.stop();
     leaveVoiceChannel(interaction.member.guild.id);
     await interaction.reply('Record scratch!');
 };
+
+module.exports = { data, execute };
+
