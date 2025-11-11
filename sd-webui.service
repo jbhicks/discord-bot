@@ -1,0 +1,16 @@
+[Unit]
+Description=Stable Diffusion WebUI for Discord Bot
+After=network.target
+
+[Service]
+Type=simple
+User=josh
+WorkingDirectory=/home/josh/stable-diffusion-webui
+ExecStart=/home/josh/stable-diffusion-webui/webui.sh --api --listen --nowebui --port 7860 --skip-torch-cuda-test --no-half
+Restart=always
+RestartSec=10
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target

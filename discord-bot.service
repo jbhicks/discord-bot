@@ -1,0 +1,14 @@
+[Unit]
+Description=Discord Bot
+After=network.target llama-server.service
+
+[Service]
+Type=simple
+User=josh
+WorkingDirectory=/home/josh/discord-bot
+ExecStart=/home/josh/discord-bot/bin/bot
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

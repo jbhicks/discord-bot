@@ -1,0 +1,16 @@
+[Unit]
+Description=Stable Diffusion WebUI (Docker)
+After=docker.service
+Requires=docker.service
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+WorkingDirectory=/home/josh/discord-bot
+ExecStart=/usr/bin/docker compose -f docker-compose.stable-diffusion.yml up -d
+ExecStop=/usr/bin/docker compose -f docker-compose.stable-diffusion.yml down
+User=josh
+Group=josh
+
+[Install]
+WantedBy=multi-user.target

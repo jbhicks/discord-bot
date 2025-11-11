@@ -1,0 +1,36 @@
+version: '3.8'
+
+services:
+  stable-diffusion-webui:
+    image: rocm/pytorch:rocm7.0.2_ubuntu22.04_py3.10_pytorch_release_2.6.0
+    container_name: stable-diffusion-webui
+    restart: unless-stopped
+    user: "1000:1000"
+    ports:
+      - "7860:7860"
+    volumes:
+      - /home/josh/stable-diffusion-webui:/workspace
+      - /home/josh/stable-diffusion-webui/models:/workspace/models
+      - /home/josh/stable-diffusion-webui/outputs:/workspace/outputs
+      - /home/josh/.cache/huggingface:/workspace/.cache/huggingface
+    devices:
+      - /dev/kfd
+      - /dev/dri
+    group_add:
+      - video
+      - render
+    environment:
+      - HSA_OVERRIDE_GFX_VERSION=11.0.0
+      - PYTORCH_ROCM_ARCH=gfx1100
+      - TORCH_COMMAND=pip install torch torchvision --index-url https://download.pytorch.org/whl/rocm6.2
+      - COMMANDLINE_ARGS=--skip-torch-cuda-test --skip-python-version-check --no-half
+      - HOME=/workspace
+      - HF_HOME=/workspace/.cache/huggingface
+      - TRANSFORMERS_CACHE=/workspace/.cache/huggingface
+    working_dir: /workspace
+    command: >
+      bash -c "
+      rm -rf /workspace/venv &&
+      cd /workspace &&
+      bash webui.sh --listen --api
+      "
